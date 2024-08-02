@@ -38,12 +38,10 @@ namespace CourseManagementSystem.Repositories
         }
         public void UpdateMajor(Major updatedMajor)
         {
-            var major = GetMajorById(updatedMajor.Id);
-            if (major != null)
-            {
+            
                 _context.Majors.Update(updatedMajor);
                 Save();
-            }
+            
         }
 
         public void RemoveCourseFromMajor(int courseId, byte majorId)

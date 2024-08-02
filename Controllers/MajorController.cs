@@ -34,13 +34,13 @@ namespace CourseManagementSystem.Controllers
                     ModelState.AddModelError("Name", "A major with this name already exists");
                 }
                 ViewBag.Majors = majorService.GetAllMajors();
-                return View("Index");
+                return RedirectToAction("Index");
             }
             else
                 ModelState.AddModelError("Name", "Something went wrong major wasn't added");
             
             ViewBag.Majors = majorService.GetAllMajors();
-            return View("Index", model);
+            return View("Index");
         }
 
         public IActionResult DeleteMajor(byte Id)
@@ -70,12 +70,10 @@ namespace CourseManagementSystem.Controllers
                 
                 majorService.UpdateMajor(new Major { Id=updatedMajor.Id,Name=updatedMajor.Name});
                 ViewBag.Majors = majorService.GetAllMajors();
-                return View("Index");
+                return RedirectToAction("Index");
             }
 
             return View(updatedMajor);
-          
-
         }
         
 
