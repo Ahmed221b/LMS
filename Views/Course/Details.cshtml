@@ -1,0 +1,113 @@
+﻿@model CourseDetailsViewModel
+
+@{
+    ViewData["Title"] = "Course Details";
+    var role = User.IsInRole("Admin");
+    var controllerName = role ? "Admin" : "Assignment";
+}
+
+<h1>@Model.Name</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Maximum Number of Students:</dt>
+        <dd class="col-sm-9">@Model.MaximumNumberOfStudents</dd>
+
+        <dt class="col-sm-3">Instructor:</dt>
+        <dd class="col-sm-9">@(Model.Instructor != null ? Model.Instructor : "N/A")</dd>
+
+        <dt class="col-sm-3">Major:</dt>
+        <dd class="col-sm-9">@Model.Major</dd>
+
+        <dt class="col-sm-3">Prerequisite Courses:</dt>
+        <dd class="col-sm-9">
+            @if (Model.Prerequisites != null && Model.Prerequisites.Any())
+            {
+                <ul>
+                    @foreach (var course in Model.Prerequisites)
+                    {
+                        <li>@course</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No prerequisite courses.</p>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Dependent Courses:</dt>
+        <dd class="col-sm-9">
+            @if (Model.Dependents != null && Model.Dependents.Any())
+            {
+                <ul>
+                    @foreach (var course in Model.Dependents)
+                    {
+                        <li>@course</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No dependent courses.</p>
+            }
+        </dd>
+    </dl>
+</div>
+
+@if (User.IsInRole("Student"))
+{
+    <!-- Grade Details Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Course Grades</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <p><strong>Assignments:</strong> @Model.Assignments / 10</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Midterm:</strong> @Model.Midterm / 15</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Practical:</strong> @Model.Practical / 25</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>Final:</strong> @Model.Final / 50</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <p><strong>GPA:</strong> @Model.GPA</p>
+        </div>
+    </div>
+}
+
+@if (!User.IsInRole("Student"))
+{
+    <partial name="_StudentsListPartialView" model="new StudentsListViewModel { Students = Model.CourseStudents, CourseId = Model.Id }"></partial>
+}
+
+@if (!User.IsInRole("Admin"))
+{
+    <partial name="_AssignmentsListPartialView" model="new AssignmentsListViewModel{Assignments= Model.CourseAssignments, CourseId = Model.Id}"></partial>
+    <partial name="_LecturesListPartialView" model="@Model.CourseLectureFiles"></partial>
+}
+
+<div>
+    @if (!User.IsInRole("Student"))
+    {
+        <a asp-action="Index" asp-controller="@controllerName" class="btn btn-primary">Back to List</a>
+    }
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="EditCourse" asp-route-id="@Model.Id" class="btn btn-primary">Edit Course</a>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

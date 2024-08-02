@@ -1,0 +1,116 @@
+﻿@model CourseManagementSystem.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<h1>Create Account</h1>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateAccount">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="FirstName" class="form-control mt-3" placeholder="First Name" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="LastName" class="form-control mt-3" placeholder="Last Name" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Address" class="form-control mt-3" placeholder="Address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="DateOfBirth" class="form-control mt-3" type="date" placeholder="Date of birth" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="Email" class="form-control mt-3" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="PhoneNumber" class="form-control mt-3" placeholder="Phone number" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Password" class="form-control mt-3" placeholder="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="ConfirmPassword" class="form-control mt-3" placeholder="Confirm Password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="RoleName" asp-items="ViewBag.Roles" class="form-control mt-3" id="roleSelect">
+                    <option value="">Select Role</option>
+                </select>
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" id="majorSelectGroup" style="display:none;">
+                <select asp-for="MajorId" asp-items="ViewBag.Majors" class="form-control mt-3">
+                    <option value="">Select Major</option>
+                </select>
+                <span asp-validation-for="MajorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create Account" class="btn btn-primary mt-3" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Accounts" asp-controller="Admin" class="mt-2">Back to List</a>
+</div>
+
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Account Created</h5>
+
+            </div>
+            <div class="modal-body">
+                Your account has been successfully created.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#roleSelect').change(function () {
+                var selectedRole = $(this).val();
+                if (selectedRole === 'Student') {
+                    $('#majorSelectGroup').show();
+                } else {
+                    $('#majorSelectGroup').hide();
+                }
+            });
+
+            var accountCreated = '@ViewBag.Created';
+            if (accountCreated === 'True') {
+                $('#successModal').modal('show');
+
+                $('#successModal').on('hidden.bs.modal', function () {
+                    window.location.href = '@Url.Action("Accounts", "Admin")';
+                });
+
+                $('#successModal').find('.btn-primary').click(function () {
+                    $('#successModal').modal('hide');
+                });
+            }
+        });
+    </script>
+}

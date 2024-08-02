@@ -1,0 +1,21 @@
+﻿<!-- Views/Shared/NotFound.cshtml -->
+@model Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Page Not Found</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1 class="display-4 text-danger">Oops!</h1>
+        <p class="lead">We can't seem to find the page you're looking for.</p>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Go Home</a>
+    </div>
+</body>
+</html>

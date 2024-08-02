@@ -1,0 +1,88 @@
+﻿@model List<Course>
+
+@{
+    ViewData["Title"] = "Courses";
+    var role = User.IsInRole("Admin");
+    var controllerName = role ? "Course" : "Assignment";
+}
+
+<h1>Courses</h1>
+
+<div class="row mb-3">
+    @if (!User.IsInRole("Student"))
+    {
+        <div class="col-md-3">
+            <form asp-action="Index" asp-controller="@controllerName" method="get">
+                <select name="majorName" class="form-control" onchange="this.form.submit()">
+                    @if (ViewBag.SelectedMajor == "All")
+                    {
+                        <option value="All" selected>All Majors</option>
+                    }
+                    else
+                    {
+                        <option value="All">All Majors</option>
+                    }
+                    @foreach (var major in ViewBag.Majors)
+                    {
+                        if (ViewBag.SelectedMajor == major.Name)
+                        {
+                            <option value="@major.Name" selected>@major.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@major.Name">@major.Name</option>
+                        }
+                    }
+                </select>
+            </form>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-3">
+                <a asp-action="AddCourse" class="btn btn-primary">Add New Course</a>
+            </div>
+        }
+    }
+    
+ 
+</div>
+
+<div class="row">
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-warning" role="alert">
+            No courses found.
+        </div>
+    }
+    else
+    {
+        @foreach (var course in Model)
+        {
+            <partial name="_CourseCardPartialView" model="course"></partial>
+        }
+    }
+  
+</div>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div>
+            <a asp-action="Index" asp-controller="Admin"> Back to dashboard</a>
+        </div>
+    }
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var deleteModal = document.getElementById('deleteModal');
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var courseId = button.getAttribute('data-course-id');
+                var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                confirmDeleteBtn.setAttribute('href', '@Url.Action("DeleteCourse", "Course")/' + courseId);
+            });
+        });
+    </script>
+}

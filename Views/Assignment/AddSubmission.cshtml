@@ -1,0 +1,43 @@
+﻿@model AddSubmissionViewModel
+
+@{
+    ViewData["Title"] = "Add Submission";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                Submit Your Assignment Solution
+            </div>
+            <div class="card-body">
+                <form asp-action="AddSubmission" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <input hidden asp-for="AssignmentId" />
+                    <input hidden asp-for="CourseId" />
+                    <input hidden asp-for="StudentId" />
+
+                    <div class="form-group">
+                        <input asp-for="SubmissionFile" class="form-control" type="file" />
+                        <span asp-validation-for="SubmissionFile" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-4 text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

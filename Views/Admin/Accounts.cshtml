@@ -1,0 +1,98 @@
+﻿@model List<ApplicationUser>
+
+<h1>User Accounts</h1>
+
+@using (Html.BeginForm("Accounts", "Admin", FormMethod.Get, new { id = "roleForm" }))
+{
+    <div class="row align-items-end mb-3">
+        <div class="col-md-6">
+            <div class="input-group">
+                <select id="roleSelect" name="roleName" asp-items="@ViewBag.Roles" class="form-control">
+                    <option value="All">All</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6 text-right">
+            <a asp-action="CreateAccount" asp-controller="Account" class="btn btn-primary">Create Account</a>
+        </div>
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Date of Birth</th>
+            <th>Phone Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.Address</td>
+                <td>@user.DataOfBirth.ToShortDateString()</td>
+                <td>@user.PhoneNumber</td>
+            
+                <td>
+                    <div class="d-flex">
+                        <button type="button" class="btn btn-danger btn-equal-width" data-toggle="modal" data-target="#confirmDeleteModal" data-user-id="@user.Id">Delete Account</button>
+                
+                    </div>
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index" asp-controller="Admin">Back to dashboard</a>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" action="">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="userId" id="userId" value="" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var selectedRole = '@ViewBag.SelectedRole';
+            $('#roleSelect').val(selectedRole);
+
+            $('#confirmDeleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var userId = button.data('user-id'); // Extract info from data-* attributes
+                var action = '/Admin/DeleteUser';
+                var modal = $(this);
+                modal.find('#deleteForm').attr('action', action);
+                modal.find('#userId').val(userId); // Set the hidden input value
+            });
+
+            $('#roleSelect').change(function () {
+                $('#roleForm').submit();
+            });
+        });
+    </script>
+}

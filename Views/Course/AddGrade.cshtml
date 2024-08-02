@@ -1,0 +1,58 @@
+﻿@model AddGradeViewModel
+
+@{
+    ViewData["Title"] = "Add Grade";
+}
+
+<h2>Add Grade</h2>
+
+<form asp-action="AddGrade" asp-controller="Course" method="post">
+    <div class="form-group">
+        <input asp-for="StudentId" type="hidden" />
+
+        <input asp-for="CourseId" type="hidden" />
+
+        <div class="form-group">
+            <p>Student Name: @Model.StudentName</p>
+
+        </div>
+
+        <div class="form-group">
+            <p>Course Name: @Model.CourseName</p>
+
+
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Assignment" class="control-label"></label>
+            <input asp-for="Assignment" class="form-control" />
+            <span asp-validation-for="Assignment" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Midterm" class="control-label"></label>
+            <input asp-for="Midterm" class="form-control" />
+            <span asp-validation-for="Midterm" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Practical" class="control-label"></label>
+            <input asp-for="Practical" class="form-control" />
+            <span asp-validation-for="Practical" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Final" class="control-label"></label>
+            <input asp-for="Final" class="form-control" />
+            <span asp-validation-for="Final" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Save</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

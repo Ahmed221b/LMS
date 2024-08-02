@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- Include Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="~/css/dashboard.css" />
+
+
+<div class="container mt-5">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-book icon"></i>
+                    <h5 class="card-title">Manage Courses</h5>
+                    <p class="card-text">Add, edit, or delete courses.</p>
+                    <a asp-action="Index" asp-controller="Course" class="btn btn-primary">Go to Courses</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-users icon"></i>
+                    <h5 class="card-title">Manage Accounts</h5>
+                    <p class="card-text">Manage user accounts and roles.</p>
+                    <a asp-action="Accounts" class="btn btn-primary">Go to Accounts</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mx-auto">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-graduation-cap icon"></i>
+                    <h5 class="card-title">Manage Majors</h5>
+                    <p class="card-text">View, Add, Edit and Delete Majors.</p>
+                    <a asp-action="Index" asp-controller="Major" class="btn btn-primary">Go to Majors</a>
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+</div>
+
+<!-- Include Bootstrap JS (Optional for interactive components like navbar) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -1,0 +1,104 @@
+﻿@model Course
+
+<div class="col-md-4">
+    <div class="card mb-3 shadow-sm">
+
+        <div class="card-body">
+            <h5 class="card-title">
+                <a asp-action="Details" asp-controller="Course" asp-route-id="@Model.Id" class="text-decoration-none">@Model.Name</a>
+            </h5>
+            <img src="~/images/courses.jpg" class="card-img-top"  alt="Course Image">
+
+            @if (!User.IsInRole("Student"))
+            {
+                <p class="card-text">
+                    <i class="fas fa-users"></i> Number of students: @(Model.Students != null ? Model.Students.Count() : 0)
+                </p>
+            }
+            <p class="card-text">
+                <i class="fas fa-book-reader"></i> Major: @(Model.Major != null ? $"{Model.Major.Name}" : "N/A")
+            </p>
+            <p class="card-text">
+                <i class="fas fa-chalkboard-teacher"></i> Instructor: @(Model.Instructor != null ? $"{Model.Instructor.FirstName} {Model.Instructor.LastName}" : "N/A")
+            </p>
+        </div>
+        <div class="card-footer text-end">
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="btn btn-primary" asp-action="EditCourse" asp-route-id="@Model.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit this course">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+
+                <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmCourseDelete-@Model.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete this course">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </a>
+
+                <!-- Delete Course Modal -->
+                <div class="modal fade" id="confirmCourseDelete-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmCourseDeleteLabel-@Model.Id" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmCourseDeleteLabel-@Model.Id">Confirm Deletion</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the course "@Model.Name"?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form asp-action="DeleteCourse" asp-route-id="@Model.Id" method="post">
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else if (User.IsInRole("Instructor"))
+            {
+                <a asp-action="AddAssignment" asp-controller="Assignment" asp-route-id="@Model.Id" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add assignment">
+                    <i class="fas fa-tasks"></i> Add Assignment
+                </a>
+                <a asp-action="AddLecture" asp-controller="Course" asp-route-courseId="@Model.Id" asp-route-courseName="@Model.Name" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add lecture">
+                    <i class="fas fa-chalkboard"></i> Add Lecture
+                </a>
+            }
+            else if (User.IsInRole("Student"))
+            {
+                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCourseDrop-@Model.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Drop this course">
+                    <i class="fas fa-times-circle"></i> Drop Course
+                </a>
+
+                <!-- Drop Course Modal -->
+                <div class="modal fade" id="confirmCourseDrop-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmCourseDropLabel-@Model.Id" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmCourseDropLabel-@Model.Id">Confirm Drop</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to drop the course "@Model.Name"?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form asp-action="DropCourse" asp-route-courseId="@Model.Id" asp-route-studentId="@UserManager.GetUserId(User)" method="post">
+                                    <button type="submit" class="btn btn-danger">Drop</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

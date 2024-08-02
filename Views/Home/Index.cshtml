@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    string userName = User.Identity.Name ?? "User";
+}
+
+
+<div class="jumbotron text-center mt-5 animate__animated animate__fadeIn">
+    <h1 class="display-4">Welcome, @userName!</h1>
+    <p class="lead">This is your course management system.</p>
+    <p>Manage your courses, assignments, and more with ease.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4 shadow-sm animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="card-body text-center">
+                <h5 class="card-title"><i class="fas fa-book-open"></i> Your Courses</h5>
+                <p class="card-text">View and manage your courses.</p>
+                @if (User.IsInRole("Instructor"))
+                {
+                    <a asp-action="Index" asp-controller="Assignment" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go to Courses</a>
+                }
+                else if (User.IsInRole("Student"))
+                {
+                    <a asp-action="MyCourses" asp-controller="Student" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go to Courses</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4 shadow-sm animate__animated animate__fadeInUp animate__delay-3s">
+            <div class="card-body text-center">
+                <h5 class="card-title"><i class="fas fa-user"></i> Profile</h5>
+                <p class="card-text">Update your profile information.</p>
+             
+                    <a asp-action="Profile" asp-controller="Account" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go to Profile</a>
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="instructions mt-5 animate__animated animate__fadeInUp animate__delay-4s">
+    <h3>Getting Started</h3>
+    <p>Welcome to the Course Management System. Here are a few steps to help you get started:</p>
+    <ol>
+        <li>Navigate to <strong>Your Courses</strong> to view and manage your enrolled or teaching courses.</li>
+        <li>Visit the <strong>Assignments</strong> section to upload or review assignments.</li>
+        <li>Keep your <strong>Profile</strong> up-to-date to ensure we have the correct information.</li>
+    </ol>
+    <p>If you have any questions or need assistance, feel free to contact our support team.</p>
+</div>

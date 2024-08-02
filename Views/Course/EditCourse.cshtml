@@ -1,0 +1,72 @@
+﻿@model CourseManagementSystem.ViewModels.EditCourseViewModel
+
+@{
+    ViewData["Title"] = "EditCourse";
+}
+
+<h1>EditCourse</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCourse">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" class="form-control" hidden/>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label mb-1"></label>
+                <input asp-for="Name" class="form-control" placeholder="Course Name"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MaxNumOfStudents" class="control-label mb-1"></label>
+                <input asp-for="MaxNumOfStudents" class="form-control" placeholder="Maximum number of students"/>
+                <span asp-validation-for="MaxNumOfStudents" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+
+                <label asp-for="MajorId" class="control-label mb-1"></label>
+                <select asp-for="MajorId" asp-items="ViewBag.Majors" class="form-control">
+                    <option value=@null>No major selected</option>
+
+                </select>
+                <span asp-validation-for="MajorId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="InstructorId" class="control-label mb-1"></label>
+                <select asp-for="InstructorId" asp-items="ViewBag.Instructors" class="form-control">
+                    <option value=@null>No instructor assigned</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="mb-2">Prerequisite Courses:</label><br />
+                @foreach (var course in ViewBag.Courses)
+                {   
+                    if (Model.Name != course.Name)
+                    {
+                        if (Model.PrerequisiteCourses.Contains(course.Id))
+                        {
+                            <input type="checkbox" name="PrerequisiteCourses" checked value="@course.Id" /> @course.Name <br />
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="PrerequisiteCourses" value="@course.Id" /> @course.Name <br />
+                        }
+                    }
+                 
+                }
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

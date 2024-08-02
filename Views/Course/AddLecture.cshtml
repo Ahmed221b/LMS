@@ -1,0 +1,33 @@
+﻿@model AddLectureViewModel
+
+@{
+    ViewData["Title"] = "Upload Lecture";
+}
+
+<link rel="stylesheet" href="~/css/addlecutre.css" />
+
+<div class="upload-lecture-form">
+    <h2>Upload Lecture</h2>
+
+    <form asp-action="AddLecture" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <input type="hidden" asp-for="CourseId" />
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="LectureFile" class="control-label"></label>
+            <input asp-for="LectureFile" class="form-control" type="file" />
+            <span asp-validation-for="LectureFile" class="text-danger"></span>
+        </div>
+        <div class="form-group mt-3">
+            <input type="submit" value="Add lecture" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

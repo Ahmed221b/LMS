@@ -1,0 +1,124 @@
+﻿@model Assignment
+
+@{
+    ViewData["Title"] = "Assignment Details";
+    var studentId = UserManager.GetUserId(User);
+    var mySubmmision = Model.AssignmentSubmissions.FirstOrDefault(p => p.StudentId == studentId);
+}
+
+<div class="container mt-5">
+    <div class="mb-4">
+        <h2 class="display-4">@Model.Title</h2>
+    </div>
+    <div class="mb-4">
+        <h5 class="text-primary">Description</h5>
+        <p class="text-justify">@Model.Description</p>
+    </div>
+    <div class="mb-4">
+        <h5 class="text-primary">Marks</h5>
+        <span class="badge bg-secondary">@Model.Marks</span>
+    </div>
+    <div class="mb-4">
+        <h5 class="text-primary">Deadline</h5>
+        <span class="text-danger">@Model.Deadline.ToString("f")</span>
+    </div>
+    <div class="mb-4">
+        <h5 class="text-primary">Course</h5>
+        <p>@Model.Course.Name</p>
+    </div>
+    @if (User.IsInRole("Instructor"))
+    {
+        <div class="mb-4">
+            <h5 class="text-primary">Submissions</h5>
+            @if (Model.AssignmentSubmissions.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var submission in Model.AssignmentSubmissions)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                Submitted by: @(submission.Student.FirstName + " " + submission.Student.LastName)
+                                <span class="badge bg-success ms-2">On @submission.SubmissionDate.ToString("f")</span>
+                            </div>
+                            <div>
+                                @if (submission.IsMarked)
+                                {
+                                    <a class="btn btn-warning btn-sm disabled"> 
+                                        <i class="fas fa-marker"></i> Marked
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="MarkAssignment" asp-controller="Assignment" asp-route-AssignmentId="@submission.AssignmentId"
+                                       asp-route-StudentId="@submission.StudentId" asp-route-CourseId="@submission.CourseId" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-marker"></i> Mark
+                                    </a>
+                                }
+                                
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No submissions yet.</p>
+            }
+        </div>
+    }   
+    else if (User.IsInRole("Student"))
+    {
+        <div class="mb-4">
+            <h5>My Submissions</h5>
+            @if(mySubmmision is null)
+            {
+                <p class="text-muted">You haven't submitted yet.</p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            Your submission:
+                            <span class="badge bg-success ms-2">On @mySubmmision.SubmissionDate.ToString("f")</span>
+                        </div>
+                        <div>
+                            @if (mySubmmision.IsMarked)
+                            {
+                                <a class="btn btn-primary btn-sm" asp-action="AssignmentResult"
+                                asp-route-AssignmentId="@mySubmmision.AssignmentId" asp-route-StudentId="@mySubmmision.StudentId" asp-route-CourseId="@mySubmmision.CourseId">
+                                     Result
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary btn-sm disabled">
+                                    Not Marked
+                                </a>
+                            }
+
+                        </div>
+                    </li>
+                </ul>    
+            }
+        </div>
+    }
+
+    
+
+    <div class="text-end">
+        @if (User.IsInRole("Instructor"))
+        {
+            <a asp-action="EditAssignment" asp-controller="Assignment" asp-route-Id="@Model.Id" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+        }
+        else if (User.IsInRole("Student"))
+        {
+            
+            <a asp-action="AddSubmission" asp-controller="Assignment" asp-route-courseId="@Model.Course.Id" asp-route-AssignmentId="@Model.Id" class="btn btn-success btn-sm">
+                <i class="fas fa-upload"></i> Add Submission
+            </a>
+        }
+    </div>
+</div>

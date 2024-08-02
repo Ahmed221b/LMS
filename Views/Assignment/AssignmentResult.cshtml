@@ -1,0 +1,28 @@
+﻿@model AssignmentResultViewModel
+
+@{
+    ViewData["Title"] = "Assignment Result";
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>Assignment Result</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4 font-weight-bold">Assignment Title:</div>
+                <div class="col-md-8">@Model.AssignmentTitle</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 font-weight-bold">Mark:</div>
+                <div class="col-md-8">@Model.Mark/5</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 font-weight-bold">Notes:</div>
+                <div class="col-md-8">@Model.Notes</div>
+            </div>
+        </div>
+        
+    </div>
+</div>
