@@ -161,11 +161,12 @@ namespace CourseManagementSystem.Controllers
         public async Task<IActionResult> EditCourse(int id)
         {
 
-            ViewBag.Instructors = await GetInstructors();
-            ViewBag.Majors = new SelectList(majorService.GetAllMajors(), "Id", "Name");
-            ViewBag.Courses = courseService.GetAllCourses();
+          
             var course = courseService.GetCourseById(id);
             var prerequisitesIds = course.PrerequisiteCourses.Select(p => p.PrerequisiteId).ToList();
+            ViewBag.Instructors = await GetInstructors();
+            ViewBag.Majors = new SelectList(majorService.GetAllMajors(), "Id", "Name");
+            ViewBag.Courses = courseService.GetAllCourses().Where(p =>p.MajorId == course.MajorId);
             return View(new EditCourseViewModel 
             {   
                 Id = course.Id,
