@@ -52,6 +52,16 @@ namespace CourseManagementSystem.Controllers
             
         }
 
+        public IActionResult GetPrerequisiteCourses(int majorId)
+        {
+            var courses = courseService.GetAllCourses()
+                                      .Where(c => c.MajorId == majorId)
+                                      .Select(c => new CourseViewModel { Id = c.Id, Name = c.Name })
+                                      .ToList();
+            return PartialView("_PrerequisiteCoursesPartialView", courses);
+        }
+
+
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -62,6 +72,10 @@ namespace CourseManagementSystem.Controllers
             ViewBag.Courses = courseService.GetAllCourses();
             return View();
         }
+
+
+       
+
 
         [Authorize(Roles = "Admin")]
         [HttpPost]

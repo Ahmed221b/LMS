@@ -1,0 +1,8 @@
+﻿@model IEnumerable<CourseViewModel>
+
+<div id="prerequisite-courses">
+    @foreach (var course in Model)
+    {
+        <input type="checkbox" name="SelectedCoursesIds" value="@course.Id" /> @course.Name <br />
+    }
+</div>
