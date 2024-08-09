@@ -12,7 +12,7 @@ Welcome to the Course Management System, a simple Learning Management System (LM
 
 ### Instructor
 - **Course Assignment:** Instructors are assigned courses by Admins.
-- **Material Management:** Upload lecture materials (videos, PDFs) and assignments.
+- **Material Management:** Upload lecture materials and assignments.
 - **Grading and Feedback:** Mark student assignments and provide feedback.
 - **Course Monitoring:** Track student progress and performance in their assigned courses.
 
